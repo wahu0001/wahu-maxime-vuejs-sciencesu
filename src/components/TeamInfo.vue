@@ -6,18 +6,7 @@
           <div class="card-body">
             <h3 class="card-title">Oh la belle équipe de {{currentGroup.titre}}</h3>
             <h5 class="card-title">Composée de {{currentGroup.recipients | length}} membres</h5>
-            <div v-for="employee in currentGroup.recipients" :key="employee.email" class="media mb-2">
-              <img
-                class="mr-3 rounded"
-                style="height: 120px"
-                :src="employee.avatar"
-                alt="Generic placeholder image"
-              />
-              <div class="media-body">
-                <h5 class="mt-0">{{employee.firstName}} & {{employee.lastName}}</h5>
-                <span class="badge badge-info">{{employee.email}}</span>
-              </div>
-            </div>
+            <Employee v-for="employee in currentGroup.recipients" :key="employee.email" v-bind:employee="employee"/>
           </div>
         </div>
       </div>
@@ -27,14 +16,19 @@
 
 <script>
 import { recipientsGroup } from "../assets/js/recipientsGroup.js";
+// import Employee from "./components/Employee";
+import Employee from "@/components/Employee";
 
 export default {
   name: "TeamInfo",
   data() {
     return {
       recipientsGroup,
-      currentGroup: null
+      currentGroup: null,
     };
+  },
+  components:{
+    Employee
   },
   methods: {
     showGroup(groupId) {
@@ -44,13 +38,15 @@ export default {
       });
     },
   },
-  filters:{
-    length(arr){
+  filters: {
+    length(arr) {
       return arr.length;
-    }
+    },
   },
   created() {
-    this.currentGroup = this.recipientsGroup.find(element => element.id == this.$route.params.groupId);
+    this.currentGroup = this.recipientsGroup.find(
+      (element) => element.id == this.$route.params.groupId
+    );
   },
 };
 </script>
